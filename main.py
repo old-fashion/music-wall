@@ -21,6 +21,7 @@ import cgi
 from wallmodel import wallmodel
 from wallview import wallview
 from remotetag import remotetag
+from remotesite import remotesite
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
@@ -41,11 +42,24 @@ class TagTestHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write(remotetag.testhtml())
 
+class SiteHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html'
+        self.response.out.write(remotesite.html(cgi.escape(self.request.get('url'))))
+
+class SiteTestHandler(webapp2.RequestHandler):
+    def get(self):
+        self.response.headers['Content-Type'] = 'text/html'
+        self.response.out.write(remotesite.testhtml())
+
+
 app = webapp2.WSGIApplication([
     ('/', MainHandler), 
     (r'/view', ViewHandler),
     (r'/view/(\w+)', ViewHandler),
     (r'/tag', TagHandler),
     (r'/tagtest', TagTestHandler),
+    (r'/site', SiteHandler),
+    (r'/sitetest', SiteTestHandler),
 ], debug=True)
 

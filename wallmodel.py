@@ -29,6 +29,7 @@ class WallModel():
                 + '/' + str(pindex % 40)
             pindex += 1
             box['url'] = self.SAMPLE_URL2
+            box['url'] = "/site-media/images/cover.jpg"
             result.append(box)
 
         return result

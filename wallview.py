@@ -25,7 +25,7 @@ class WallView():
             'boxes': model,
             'border': 2,
         }
-        path = os.path.join(os.path.dirname(__file__), 'wallview.html')
+        path = os.path.join(os.path.dirname(__file__), 'template/wallview.html')
         result = template.render(path, template_values)
         return result
 

@@ -34,9 +34,12 @@ class RemoteTag():
 
     def testhtml(self):
         template_values = {}
-        path = os.path.join(os.path.dirname(__file__), 'tagtest.html')
+        path = os.path.join(os.path.dirname(__file__), 'template/tagtest.html')
         result = template.render(path, template_values)
         return result
+
+    def put(self, metadata):
+        pass
 
 remotetag = RemoteTag()
 
