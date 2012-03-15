@@ -209,12 +209,15 @@ class EasyID3(DictMixin, Metadata):
             keys.extend(self.ListFallback(self.__id3, ""))
         return keys
 
+
     def pprint(self):
         """Print tag key=value pairs."""
         strings = []
         for key in sorted(self.keys()):
             values = self[key]
             for value in values:
+                if key == 'cover_data':
+                    continue
                 strings.append("%s=%s" % (key, value))
         return "\n".join(strings)
 
@@ -395,6 +398,28 @@ def peakgain_list(id3, key):
         keys.append("replaygain_%s_peak" % frame.desc)
     return keys
 
+import traceback
+
+def cover_get(id3, key):
+    try:
+        frame = id3["APIC:"]
+    except KeyError:
+        pass
+    else:
+        if frame.data and frame.mime:
+            return [True]
+    return [False]
+
+def cover_data_get(id3, key):
+    #traceback.print_stack()    
+    try:
+        frame = id3["APIC:"]
+    except KeyError:
+        pass
+    else:
+        if frame.data and frame.mime:
+            return [frame.data]
+
 for frameid, key in {
     "TALB": "album",
     "TBPM": "bpm",
@@ -438,6 +463,9 @@ EasyID3.RegisterKey("website", website_get, website_set, website_delete)
 EasyID3.RegisterKey(
     "replaygain_*_gain", gain_get, gain_set, gain_delete, peakgain_list)
 EasyID3.RegisterKey("replaygain_*_peak", peak_get, peak_set, peak_delete)
+
+EasyID3.RegisterKey("cover", cover_get)
+EasyID3.RegisterKey("cover_data", cover_data_get)
 
 # At various times, information for this came from
 # http://musicbrainz.org/docs/specs/metadata_tags.html

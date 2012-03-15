@@ -17,15 +17,18 @@
 
 import webapp2
 import cgi
+import time
 
 from wallmodel import wallmodel
 from wallview import wallview
 from remotetag import remotetag
 from remotesite import remotesite
+from funnel import *
+from cover import *
 
 class MainHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.out.write('Hello world!')
+        self.response.out.write('Music-Wall')
 
 class ViewHandler(webapp2.RequestHandler):
     def get(self, preset='tv'):
@@ -37,29 +40,23 @@ class TagHandler(webapp2.RequestHandler):
         self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write(remotetag.html(cgi.escape(self.request.get('url'))))
 
-class TagTestHandler(webapp2.RequestHandler):
-    def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        self.response.out.write(remotetag.testhtml())
-
 class SiteHandler(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'text/html'
         self.response.out.write(remotesite.html(cgi.escape(self.request.get('url'))))
 
-class SiteTestHandler(webapp2.RequestHandler):
+class TestHandler(webapp2.RequestHandler):
     def get(self):
-        self.response.headers['Content-Type'] = 'text/html'
-        self.response.out.write(remotesite.testhtml())
-
+        self.redirect('/site-media/test/test.html')
 
 app = webapp2.WSGIApplication([
     ('/', MainHandler), 
     (r'/view', ViewHandler),
     (r'/view/(\w+)', ViewHandler),
     (r'/tag', TagHandler),
-    (r'/tagtest', TagTestHandler),
     (r'/site', SiteHandler),
-    (r'/sitetest', SiteTestHandler),
+    (r'/funnel', FunnelHandler),
+    (r'/cover', CoverHandler),
+    (r'/test', TestHandler),
 ], debug=True)
 

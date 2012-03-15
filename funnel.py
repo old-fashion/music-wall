@@ -8,6 +8,8 @@ from google.appengine.ext.webapp import template
 from google.appengine.api import urlfetch
 from google.appengine.api import taskqueue
 
+import remotetag
+
 class FunnelHandler(webapp2.RequestHandler):
     def post(self):
         url = self.request.get('site')
@@ -42,7 +44,7 @@ class NginxFunnel(Funnel):
 
     def process(self):
         for item in self.mlist:
-            time.sleep(1)
+            remotetag.extract(item)
             logging.info(str(item))
 
 if __name__ == "__main__":
